@@ -4,13 +4,15 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import Topbar from "./scenes/global/topbar";
 import Dashboard from "./scenes/dashboard";
 import { ColorModeContext, useMode } from "./theme";
-import { Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Sidebar from "./scenes/global/sidebar";
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import AuthGoogle from "./AuthGoogle";
 import firebase from "firebase/compat/app";
+
 import {onAuthStateChanged} from "firebase/auth";
+import { Authenticated } from "./Authenticated";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -34,6 +36,7 @@ const [user, setUser] = useState({email: '', uid: ''});
 useEffect(() => {
   onAuthStateChanged(firebase.auth(), (user)=>{
     console.log(user);
+    
     setUser({email: user.email, id: user.uid })
   });
 });
@@ -44,7 +47,16 @@ useEffect(() => {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <div className="app">
-          <AuthGoogle auth={firebase.auth()}/>
+          <BrowserRouter>
+          {user.email? (
+            <Routes>
+              <Route path="/Authenticated" 
+              element={<Authenticated user={user} />}/>
+            </Routes>
+          ) : (
+            <AuthGoogle auth={firebase.auth()}/>
+          )}
+          </BrowserRouter>
             {/* <Sidebar isSidebar={isSidebar}/> */}
           <main className="content">
             <Topbar />
