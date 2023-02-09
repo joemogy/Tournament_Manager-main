@@ -46,26 +46,25 @@ useEffect(() => {
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <div className="app">
-          <BrowserRouter>
-          {user.email? (
-            <Routes>
-              <Route path="/Authenticated" 
-              element={<Authenticated user={user} />}/>
-            </Routes>
-          ) : (
-            <AuthGoogle auth={firebase.auth()}/>
-          )}
-          </BrowserRouter>
-            {/* <Sidebar isSidebar={isSidebar}/> */}
           <main className="content">
             <Topbar />
-            <Routes>
-              <Route path="/" element={<Dashboard />} />
-          
-            </Routes>
+              {/* <Sidebar isSidebar={isSidebar}/> */}
+                <div className="app">
+                  <BrowserRouter>
+                    {user.email? (
+                  <Routes>
+                <Route path="/" element={<Dashboard />} />
+              <Route path="/Authenticated" 
+              element={<Authenticated user={user} />}/>
+              </Routes>
+              ) : (
+                <AuthGoogle auth={firebase.auth()}/>
+               )}
+              </BrowserRouter>
+
+            </div>
           </main>
-        </div>
+        
       </ThemeProvider>
     </ColorModeContext.Provider>
   );
